@@ -44,11 +44,17 @@ def main(config):
                 children = [
                     render.Row(
                         expanded=True,
-                        main_align="center",
+                        main_align="space_evenly",
                         children = [
-                            render.Text(str(int(match_data["localteam_score"]))),
-                            render.Text(" - "),
-                            render.Text(str(int(match_data["visitorteam_score"]))),
+                            render.Row(
+                                main_align="center",
+                                children=[
+                                    render.Text(str(int(match_data["localteam_score"]))),
+                                    render.Text(" - "),
+                                    render.Text(str(int(match_data["visitorteam_score"])))
+                                ],
+                            ),
+                            render.Text(str(match_data["time"]))
                         ]
                     ),
                     render.Row(
@@ -85,13 +91,7 @@ def main(config):
                         main_align="space_evenly",
                         cross_align="center",
                         children = [
-                            # render.Text(humanize.time_format("M/dd", time.parse_time(match_data["date"], format="2006-01-02"))),
-                            render.Text(content=(humanize.time(time.parse_time(match_data["date"], format="2006-01-02"))), font="tom-thumb"),
-                            render.Padding(
-                                pad = (0,0,1,0),
-                                child = render.Box(height=1, width=1, color="#fff"),
-                            ),
-                            render.Text(str(match_data["time"]))
+                            render.Text(content=(humanize.time(time.parse_time(match_data["date_time"], format="2006-01-02 15:04:05"))), font="tom-thumb"),
                         ]
                     )
                 ],
@@ -109,7 +109,7 @@ def get_match_data(PREMIER_URL, API):
     match_data["localteam_id"] = match["localteam_id"]
     match_data["visitorteam_id"] = match["visitorteam_id"]
     match_data["time"] = match["time"]["status"]
-    match_data["date"] = match["time"]["starting_at"]["date"]
+    match_data["date_time"] = match["time"]["starting_at"]["date_time"]
     match_data["localteam_score"] = match["scores"]["localteam_score"]
     match_data["visitorteam_score"] = match["scores"]["visitorteam_score"]
     match_data["localteam_color"] = match["colors"]["localteam"]["color"]
